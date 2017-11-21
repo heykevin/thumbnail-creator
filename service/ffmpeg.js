@@ -35,35 +35,42 @@ const getVideo = (url, res) => {
 
   // ffmpeg console commands
   let request = http.get(url, (response) => {
+
+    if (response.statusCode !== 200) {
+      console.log("in here")
+      res.status(500).send(JSON.stringify({
+        error: 'Link broke!'
+      }));
+    }
+
     const stream = response.pipe(file);
-    let dog = stream.on('finish', () => {
+    stream.on('finish', () => {
       // ffmpeg console command adapted from: https://superuser.com/questions/538112/meaningful-thumbnails-for-a-video-using-ffmpeg
       exec(`ffmpeg -i ${video} -vf "select='gt(scene\,0.4)'" -frames:v 5 -vsync vfr ${videoPath}/thumb%02d.jpg`, (err, stdout, stderr) => {
         console.log("Creating thumbnails")
       if (err) {
         console.log("Error");
         console.log(`stderr: ${stderr}`);
-        res.send(err);
+        res.status(500).send(JSON.stringify({
+          error: 'Something broke!'
+        }));
       } else {
         // send uuid if successful
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
-        res.send(uuid);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({
+          id: uuid
+        }));
         }
       });
-    console.log(new_res);
     });
   });
-
-  // console.log(request);
   return
 };
 
-const test = (url, res) => {
-  url = "http://mcs-dev.testing.s3.amazonaws.com/sample_videos/despicableme-tlr1_h1080p_5seconds.MP4";
-  let response = getVideo(url, res);
-  console.log("RESPONSE: " + response);
-  return response;
+const createThumbnail = (url, res) => {
+  return getVideo(url, res);
 };
 
-export default test;
+export default createThumbnail;

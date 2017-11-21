@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {Button} from 'react-bootstrap';
-import { connect } from "react-redux";
 import logo from './logo.svg';
-import imageSearch from './api/api.js';
+import {Api} from './api/api.js';
 import './styles/App.css';
 
 class App extends Component {
@@ -10,22 +9,41 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: null
+      image: null,
+      url: '',
+      error: null
     };
-
+    this.onChange = this.onChange.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   onClick(event) {
-    console.log(event);
+    const promise = Api.postUrl(this.state.url);
+    Promise.resolve(promise)
+    .then((res) => {
+      console.log('resepon', res);
+      this.setState({
+        error: res.response.error,
+        image: res.response.id
+      });
+    });
   }
 
-
+  onChange(event) {
+    this.setState({
+      url: event.target.value
+    });
+  }
 
   render() {
+    let imageLink = this.state.image ? `http://localhost:5000/${this.state.image}/thumb01.jpg` : null
     let thumbStyle = {
-      backgroundImage: `url(${this.state.link})`,
-      height: '600px',
-      width: '600px'
+      backgroundImage: `url(${imageLink})`,
+      backgroundSize: '769px 432px',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      width: '100%',
+      height: '500px'
     };
 
     return (
@@ -36,13 +54,12 @@ class App extends Component {
         </header>
         <div className="app-body">
           <div className="search-container">
-            <input className="thumb-url" type="text"/>
-            <button className="thumb-button" onClick={this.onClick}> Search </button>
+            <input className="thumb-url" type="text" onChange={this.onChange}/>
+            <Button className="thumb-button" onClick={this.onClick}> Search </Button>
           </div>
           <div className="image-container">
             <div className="error-box"> 
               <span> {this.state.error ? "Error found" : ""} </span>
-              <span> {this.state.pending ? "Stopped looking" : ""} </span>
             </div>
             <div className="thumb-image" style={thumbStyle}/>
           </div>
