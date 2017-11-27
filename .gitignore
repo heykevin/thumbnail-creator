@@ -12,6 +12,7 @@ node_modules/
 build/
 /screenshots
 /videos
+videos/
 
 # misc
 .DS_Store

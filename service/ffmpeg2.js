@@ -4,8 +4,9 @@ import fs from 'fs';
 import uuidv4 from 'uuid/v4';
 import path from 'path';
 
+// Would normally be in a config
 const appDirectory = fs.realpathSync(process.cwd());
-const OUTPUT_DIRECTORY = "videos"
+const OUTPUT_DIRECTORY = 'videos'
 
 export default class ffmpeg {
   constructor(url, res) {
@@ -39,7 +40,7 @@ export default class ffmpeg {
   createThumbnails(command, uuid) {
     const res = this.res;
     exec(command, (err, stdout, stderr) => {
-      console.log("Creating thumbnails")
+      console.log('Creating thumbnails')
     if (err) {
       console.log(`stderr: ${stderr}`);
       res.status(500).send(JSON.stringify({
@@ -68,7 +69,7 @@ export default class ffmpeg {
     let file = fs.createWriteStream(`${video}`);
     console.log(`Writing to: ${video}`);
   //ffmpeg command
-    const ffmpegCommand = `ffmpeg -i ${video} -vf "select='gt(scene\,0.4)'" -frames:v 5 -vsync vfr ${videoPath}/thumb%02d.jpg`;
+    const ffmpegCommand = `ffmpeg -i ${video} -vf 'select='gt(scene\,0.4)'' -frames:v 5 -vsync vfr ${videoPath}/thumb%02d.jpg`;
     const res = this.res;
 
     // ffmpeg console command

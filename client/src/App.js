@@ -11,27 +11,35 @@ class App extends Component {
     this.state = {
       image: null,
       url: '',
-      error: null
+      error: null,
+      loading: false
     };
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
   }
 
   onClick(event) {
+    this.setState({
+      error: null,
+      loading: true
+    });
+
     const promise = Api.postUrl(this.state.url);
+
     Promise.resolve(promise)
     .then((res) => {
-      console.log('resepon', res);
+      console.log('response', res);
       this.setState({
         error: res.response.error,
-        image: res.response.id
+        image: res.response.id,
+        loading: false
       });
     });
   }
 
   onChange(event) {
     this.setState({
-      url: event.target.value
+      url: event.target.value,
     });
   }
 
@@ -55,13 +63,20 @@ class App extends Component {
         <div className="app-body">
           <div className="search-container">
             <input className="thumb-url" type="text" onChange={this.onChange}/>
-            <Button className="thumb-button" onClick={this.onClick}> Search </Button>
+            <Button 
+              className="thumb-button" 
+              onClick={this.onClick}
+              disabled={this.state.loading}
+            > 
+              {this.state.loading ? 'Loading...' : 'Search'}
+            </Button>
           </div>
           <div className="image-container">
-            <div className="error-box"> 
-              <span> {this.state.error ? "Error found" : ""} </span>
+            <div className="thumb-image" style={thumbStyle}>
+              <div className="error-box"> 
+                <span className="error-message"> {this.state.error ? "Error found" : ""} </span>
+              </div>
             </div>
-            <div className="thumb-image" style={thumbStyle}/>
           </div>
         </div>
       </div>
