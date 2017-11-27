@@ -6,6 +6,7 @@ import './styles/App.css';
 
 class App extends Component {
 
+  // Setting initial app state
   constructor() {
     super();
     this.state = {
@@ -18,20 +19,23 @@ class App extends Component {
     this.onClick = this.onClick.bind(this);
   }
 
+  // Button on click event, 
   onClick(event) {
     this.setState({
       error: null,
       loading: true
     });
 
+    // Send api call to server for thumbnail
     const promise = Api.postUrl(this.state.url);
 
+    // Resolve call and update set with success or failure
     Promise.resolve(promise)
     .then((res) => {
       console.log('response', res);
       this.setState({
         error: res.response.error,
-        image: res.response.id,
+        image: res.response.imagePath,
         loading: false
       });
     });
@@ -44,7 +48,7 @@ class App extends Component {
   }
 
   render() {
-    let imageLink = this.state.image ? `http://localhost:5000/${this.state.image}/thumb01.jpg` : null
+    let imageLink = this.state.image ? `http://localhost:5000/${this.state.image}` : null
     let thumbStyle = {
       backgroundImage: `url(${imageLink})`,
       backgroundSize: '769px 432px',
@@ -68,7 +72,7 @@ class App extends Component {
               onClick={this.onClick}
               disabled={this.state.loading}
             > 
-              {this.state.loading ? 'Loading...' : 'Search'}
+              {this.state.loading ? 'Loading...' : 'Create'}
             </Button>
           </div>
           <div className="image-container">
