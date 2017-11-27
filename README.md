@@ -16,6 +16,7 @@ npm install
 npm start
 ```
 Service will start on localhost:5000
+Screenshots will be saved in /service/videos/ by default.
 
 ## Requirements
 * Accepts URL for video
