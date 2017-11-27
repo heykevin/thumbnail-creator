@@ -28,3 +28,8 @@ Screenshots will be saved in /service/videos/ by default.
 * https://stackoverflow.com/questions/16316330/how-to-write-file-if-parent-folder-doesnt-exist
 * https://superuser.com/questions/538112/meaningful-thumbnails-for-a-video-using-ffmpeg
 * https://www.ffmpeg.org/documentation.html
+
+## Videos used to test
+* http://mcs-dev.testing.s3.amazonaws.com/sample_videos/despicableme-tlr1_h1080p_5seconds.MP4
+* http://videos2.sendvid.com/fe/f9/bgmyb5g7.mp4
+* http://videos2.sendvid.com/d7/5c/s0dbu7rv.mp4
